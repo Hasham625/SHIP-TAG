@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHIP-TAG | Super Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --brand-blue: #2d3e7d; 
+            --header-blue: #004d80;
+            --bg-gray: #d9d9d9;
+            --accent-blue: #d1e8ff;
+            --text-gray: #64748b;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; transition: all 0.2s ease; }
+
+        body, html {
+            height: 100%;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #ffffff;
+            overflow: hidden;
+        }
+
+        .dashboard-layout { display: flex; flex-direction: column; height: 100vh; background-color: var(--bg-gray); }
+        
+        header {
+            background-color: var(--header-blue);
+            color: white;
+            padding: 12px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn-logout {
+            background: transparent; color: white; border: 2px solid white;
+            padding: 8px 25px; border-radius: 12px; font-weight: 500; cursor: pointer;
+        }
+
+        .main-container { display: flex; flex: 1; padding: 20px; gap: 20px; overflow: hidden; }
+        
+        /* SIDEBAR */
+        .sidebar { width: 280px; background: white; border-radius: 15px; padding: 20px; display: flex; flex-direction: column; }
+        .nav-item { 
+            padding: 12px 15px; margin-bottom: 5px; border-radius: 5px; 
+            color: #004d80; font-weight: 600; display: flex; align-items: center; 
+            gap: 10px; cursor: pointer; 
+        }
+        .nav-item.active-nav { background-color: var(--accent-blue); }
+        .nav-item.disabled-nav { opacity: 0.3; cursor: not-allowed; pointer-events: none; }
+
+        .sub-menu { display: flex; flex-direction: column; padding-left: 35px; margin-bottom: 10px; }
+        .sub-item { padding: 8px 10px; font-size: 14px; color: var(--text-gray); font-weight: 500; cursor: pointer; border-radius: 4px; }
+        .sub-item.active-sub { color: var(--header-blue); font-weight: 700; background: #f0f7ff; }
+
+        /* CONTENT AREA */
+        .content-view { flex: 1; display: block; overflow-y: auto; padding-right: 10px; }
+        .view-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+
+        /* COMBINED BUTTON */
+        .btn-combined {
+            background-color: var(--header-blue); color: white; border: none;
+            padding: 12px 24px; border-radius: 10px; font-weight: 600; cursor: pointer;
+            display: flex; align-items: center; gap: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .btn-combined:hover { background-color: #003a61; transform: translateY(-1px); }
+
+        /* CARD & TABLE */
+        .flex-card { background: white; border-radius: 20px; padding: 25px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); min-height: 550px; display: flex; flex-direction: column; }
+        .search-container { position: relative; margin-bottom: 20px; width: 300px; }
+        .search-container input { width: 100%; padding: 10px 15px 10px 40px; border: 1px solid #e2e8f0; border-radius: 10px; outline: none; }
+        .search-container i { position: absolute; left: 15px; top: 12px; color: var(--text-gray); }
+
+        .data-table { width: 100%; border-collapse: collapse; }
+        .data-table th { text-align: left; padding: 12px 20px; color: var(--header-blue); font-size: 14px; background: #f8fafc; }
+        .data-table td { padding: 15px 20px; font-size: 14px; border-bottom: 1px solid #f1f5f9; color: #475569; }
+
+        /* FANCY MODAL STYLES */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(4px);
+            display: none; justify-content: center; align-items: center; z-index: 1000;
+        }
+        .modal-box {
+            background: white; width: 450px; border-radius: 24px; padding: 35px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2); position: relative;
+        }
+        .modal-header { text-align: center; margin-bottom: 25px; }
+        .modal-header h2 { color: var(--header-blue); font-size: 22px; }
+
+        .form-group { margin-bottom: 18px; }
+        .form-group label { display: block; margin-bottom: 8px; font-size: 14px; font-weight: 600; color: #475569; }
+        .form-group input, .form-group select {
+            width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 10px; outline: none; font-size: 14px;
+        }
+        .form-group input:focus { border-color: var(--header-blue); }
+
+        .btn-submit {
+            width: 100%; background: var(--header-blue); color: white; border: none;
+            padding: 14px; border-radius: 12px; font-weight: 700; cursor: pointer; margin-top: 10px;
+        }
+        .close-modal { position: absolute; top: 20px; right: 20px; cursor: pointer; color: #94a3b8; }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-layout">
+        <header>
+            <h2 style="font-weight: 800;">Ship Tag Logo</h2>
+            <button class="btn-logout">Logout</button>
+        </header>
+
+        <div class="main-container">
+            <div class="sidebar">
+                <div class="nav-item disabled-nav"><i class="fa-solid fa-chart-line"></i> Dashboard</div>
+                <div class="nav-item active-nav">
+                    <i class="fa-solid fa-users"></i> Manage Users
+                    <i class="fa-solid fa-chevron-down" style="margin-left: auto; font-size: 12px;"></i>
+                </div>
+                <div class="sub-menu">
+                    <div class="sub-item active-sub">Manage User</div>
+                    <div class="sub-item">User Log</div>
+                </div>
+                <div class="nav-item disabled-nav"><i class="fa-solid fa-box"></i> Manage Packages</div>
+                <div class="nav-item disabled-nav"><i class="fa-solid fa-microchip"></i> Manage Devices</div>
+                <div class="nav-item disabled-nav"><i class="fa-solid fa-user-circle"></i> My Profile</div>
+            </div>
+
+            <div class="content-view">
+                <div class="view-header">
+                    <h2 style="color: var(--header-blue); font-weight: 700;">Manage User</h2>
+                    <button class="btn-combined" onclick="toggleModal(true)">
+                        <i class="fa-solid fa-plus-circle"></i> Add User / Organisation
+                    </button>
+                </div>
+
+                <div class="flex-card">
+                    <h3 style="margin-bottom: 15px;">User & Organisation Directory</h3>
+                    <div class="search-container">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" placeholder="Search users or organisations...">
+                    </div>
+
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Created At</th>
+                                <th>View</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Global Logistics Ltd.</td>
+                                <td>Organisation</td>
+                                <td>Oct 12, 2025</td>
+                                <td><i class="fa-solid fa-eye" style="color: var(--header-blue); cursor: pointer;"></i></td>
+                            </tr>
+                            <tr>
+                                <td>Sarah Jenkins</td>
+                                <td>Local User</td>
+                                <td>Nov 05, 2025</td>
+                                <td><i class="fa-solid fa-eye" style="color: var(--header-blue); cursor: pointer;"></i></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="addModal">
+        <div class="modal-box">
+            <i class="fa-solid fa-times close-modal" onclick="toggleModal(false)"></i>
+            <div class="modal-header">
+                <h2>Registration</h2>
+                <p style="color: #94a3b8; font-size: 13px;">Create a new entry in the system</p>
+            </div>
+            
+            <div class="form-group">
+                <label>Selection Type</label>
+                <select id="userType">
+                    <option value="local">Local User</option>
+                    <option value="organisation">Organisation</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" placeholder="e.g. John Doe or Tech Corp">
+            </div>
+
+            <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" placeholder="example@domain.com">
+            </div>
+
+            <button class="btn-submit" onclick="alert('Saving information...'); toggleModal(false)">Create Account</button>
+        </div>
+    </div>
+
+    <script>
+        function toggleModal(show) {
+            document.getElementById('addModal').style.display = show ? 'flex' : 'none';
+        }
+    </script>
+</body>
+</html>

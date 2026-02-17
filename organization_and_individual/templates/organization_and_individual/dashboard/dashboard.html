@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SHIP-TAG | Secure Tracking System</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <!-- Leaflet CSS -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+    <!-- Add Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <style>
+      :root {
+        --brand-blue: #2d3e7d;
+        --header-blue: #004d80;
+        --bg-gray: #d9d9d9;
+        --input-border: #e2e8f0;
+        --accent-cyan: #00aeef;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        transition: all 0.2s ease;
+      }
+
+      body,
+      html {
+        height: 100%;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #ffffff;
+        overflow: hidden;
+      }
+
+      .page {
+        display: none;
+        height: 100vh;
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+      }
+
+      /* Set Dashboard as the default active page */
+      .active {
+        display: flex;
+      }
+
+      /* --- LAYOUT --- */
+      .dashboard-layout {
+        flex-direction: column;
+        background-color: var(--bg-gray);
+        justify-content: flex-start;
+      }
+
+      header {
+        background-color: var(--header-blue);
+        color: white;
+        padding: 12px 30px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+      }
+
+      .logout-btn {
+        color: white;
+        border: 1px solid white;
+        padding: 6px 15px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-size: 0.9rem;
+      }
+
+      .main-container {
+        display: flex;
+        flex: 1;
+        padding: 20px;
+        gap: 20px;
+        width: 100%;
+        overflow: hidden;
+      }
+
+      /* SIDEBAR LOGIC */
+      .sidebar {
+        width: 280px;
+        background: white;
+        border-radius: 15px;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+      }
+      .nav-item {
+        padding: 12px 15px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        color: #004d80;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      /* Dashboard remains active and clickable */
+      .nav-item.active-nav {
+        background-color: #d1e8ff;
+        cursor: pointer;
+      }
+
+      /* Other fields are visible but locked/unclickable */
+      .nav-item.disabled-nav {
+        opacity: 0.4;
+        cursor: not-allowed;
+        pointer-events: none; /* Disables all mouse interaction */
+      }
+
+      .content-view {
+        flex: 1;
+        display: none;
+        overflow-y: auto;
+      }
+      .content-view.active-view {
+        display: block;
+      }
+
+      /* DASHBOARD CONTENT */
+      .content-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        margin-bottom: 20px;
+      }
+      .stat-card {
+        background: white;
+        border-radius: 20px;
+        padding: 25px;
+        height: 140px;
+        position: relative;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      }
+      .stat-value {
+        position: absolute;
+        bottom: 20px;
+        right: 25px;
+        font-size: 24px;
+        font-weight: 800;
+        color: #000;
+      }
+
+      .dashboard-flex-bottom {
+        display: flex;
+        gap: 20px;
+        margin-top: 10px;
+        height: 400px;
+      }
+      .flex-card {
+        background: white;
+        border-radius: 20px;
+        padding: 20px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+      }
+      .flex-card h3 {
+        color: #000;
+        font-size: 18px;
+        margin-bottom: 15px;
+        border-bottom: 2px solid #f1f5f9;
+        padding-bottom: 10px;
+      }
+      .placeholder-box {
+        flex: 1;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        overflow: hidden;
+        position: relative;
+      }
+
+      #map {
+        flex: 1;
+        width: 100%;
+        height: 100%;
+        border-radius: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="dashboard-layout" class="page active dashboard-layout">
+      <header>
+        <h2 style="font-weight: 800;">Ship Tag Logo</h2>
+        <button class="btn-logout" onclick="logout()">Logout</button>
+    </header>
+
+      <div class="main-container">
+        <div class="sidebar">
+          <div class="nav-item active-nav">
+            <i class="fa-solid fa-chart-line"></i> Dashboard
+          </div>
+          <div class="nav-item disabled-nav">
+            <i class="fa-solid fa-users"></i> Manage Users
+          </div>
+          <div class="nav-item disabled-nav">
+            <i class="fa-solid fa-box"></i> Manage Packages
+          </div>
+          <div class="nav-item disabled-nav">
+            <i class="fa-solid fa-microchip"></i> Manage Devices
+          </div>
+          <div class="nav-item ">
+            <a href="/organization/admin-profile" style="display: flex; align-items: center; gap: 10px; color: #004d80; text-decoration: none;">
+                <i class="fa-solid fa-user-circle"></i> My Profile
+            </a>
+            </div>
+
+
+          <div style="margin-top: auto">
+            <h3 style="color: #004d80; font-size: 24px">Need Help ?</h3>
+            <button
+              style="
+                background: #004d80;
+                color: white;
+                width: 100%;
+                padding: 12px;
+                border: none;
+                border-radius: 5px;
+                cursor: not-allowed;
+                font-weight: bold;
+              "
+            >
+              Chat With Us
+            </button>
+          </div>
+        </div>
+
+        <div id="dashboard-view" class="content-view active-view">
+          <div class="content-grid">
+            <div class="stat-card">
+              <b>Total Devices</b
+              ><span class="stat-value" id="val-total-devices">2000</span>
+            </div>
+            <div class="stat-card">
+              <b>Total Packages</b
+              ><span class="stat-value" id="val-total-pkgs">3000</span>
+            </div>
+            <div class="stat-card">
+              <b>Warnings</b><span class="stat-value" id="val-warnings">5</span>
+            </div>
+            <div class="stat-card">
+              <b>Active Devices</b
+              ><span class="stat-value" id="val-active">1222</span>
+            </div>
+            <div class="stat-card">
+              <b>Offline Devices</b
+              ><span class="stat-value" id="val-offline">778</span>
+            </div>
+            <div class="stat-card">
+              <b>New Alerts</b
+              ><span class="stat-value" id="val-alerts">12</span>
+            </div>
+          </div>
+
+          <div class="dashboard-flex-bottom">
+            <div class="flex-card">
+              <h3>Recently Active Devices</h3>
+              <div
+                class="placeholder-box"
+                style="overflow-x: auto; padding: 10px"
+              >
+                <table
+                  style="
+                    width: 100%;
+                    border-collapse: collapse;
+                    font-size: 14px;
+                  "
+                >
+                  <thead>
+                    <tr style="background-color: #f1f5f9; text-align: left">
+                      <th style="padding: 8px; border-bottom: 1px solid #ddd">
+                        Device ID
+                      </th>
+                      <th style="padding: 8px; border-bottom: 1px solid #ddd">
+                        Device Type
+                      </th>
+                      <th style="padding: 8px; border-bottom: 1px solid #ddd">
+                        From / To
+                      </th>
+                      <th style="padding: 8px; border-bottom: 1px solid #ddd">
+                        Date
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody id="recent-devices-body">
+                    <!-- Example static rows, you can populate dynamically from backend -->
+                    <tr>
+                      <td style="padding: 8px; border-bottom: 1px solid #ddd">
+                        DVC001
+                      </td>
+                      <td style="padding: 8px; border-bottom: 1px solid #ddd">
+                        Sensor
+                      </td>
+                      <td style="padding: 8px; border-bottom: 1px solid #ddd">
+                        New York → LA
+                      </td>
+                      <td style="padding: 8px; border-bottom: 1px solid #ddd">
+                        2026-02-15
+                      </td>
+                    </tr>
+                    <tr>
+                      <td style="padding: 8px; border-bottom: 1px solid #ddd">
+                        DVC002
+                      </td>
+                      <td style="padding: 8px; border-bottom: 1px solid #ddd">
+                        Tracker
+                      </td>
+                      <td style="padding: 8px; border-bottom: 1px solid #ddd">
+                        London → Paris
+                      </td>
+                      <td style="padding: 8px; border-bottom: 1px solid #ddd">
+                        2026-02-16
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="flex-card">
+              <h3>Devices Location</h3>
+              <div id="map" class="placeholder-box"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Initialize map
+      const map = L.map("map").setView([40.75, -73.98], 12); // [lat, lng], zoom
+
+      // Add OpenStreetMap tiles
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution:
+          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      }).addTo(map);
+
+      // Add a marker
+      const marker = L.marker([40.75, -73.98])
+        .addTo(map)
+        .bindPopup("<b>Vessel Location</b>")
+        .openPopup();
+
+
+
+        // ========================================
+        // Logout Function
+        // ========================================
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                // Clear authentication tokens
+                localStorage.removeItem('authToken');
+                sessionStorage.removeItem('authToken');
+                
+                // Redirect to login page
+                window.location.href = '/login';
+            }
+        }
+    </script>
+  </body>
+</html>

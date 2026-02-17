@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHIP-TAG | Manage Packages</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            /* Precise colors from images */
+            --header-navy: #1b4d89;          /* */
+            --bg-gray: #d9d9d9;               /* */
+            --sidebar-active-bg: #dbeafe;     /* */
+            --sidebar-active-text: #1b4d89;   /* */
+            --sidebar-text: #64748b;
+            --btn-dark-navy: #1b4d89;         /* */
+            --btn-sky-blue: #5ba4e6;          /* */
+            --status-green: #3a7d44;          /* */
+            --action-blue: #1b4d89;           /* */
+            --user-blue: #5ba4e6;             /* */
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+
+        body, html { height: 100%; background-color: var(--bg-gray); overflow: hidden; }
+
+        .dashboard-layout { display: flex; flex-direction: column; height: 100vh; }
+        
+        header {
+            background-color: var(--header-navy);
+            color: white;
+            padding: 12px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn-logout {
+            background: transparent; color: white; border: 1.5px solid white;
+            padding: 5px 20px; border-radius: 15px; font-weight: 600; font-size: 13px;
+        }
+
+        .main-container { display: flex; flex: 1; padding: 20px; gap: 20px; }
+        
+        /* Sidebar */
+        .sidebar { 
+            width: 260px; background: white; border-radius: 20px; padding: 20px 10px; 
+            display: flex; flex-direction: column; gap: 5px;
+        }
+        
+        .nav-item { 
+            padding: 12px 15px; border-radius: 8px; color: var(--sidebar-text); 
+            font-weight: 700; display: flex; align-items: center; gap: 12px; 
+            font-size: 15px; text-decoration: none;
+        }
+
+        .nav-item.active { background-color: var(--sidebar-active-bg); color: var(--sidebar-active-text); }
+
+        .content-area { flex: 1; }
+
+        /* Generic Card Style */
+        .view-card { 
+            background: white; border-radius: 20px; padding: 30px; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05); min-height: 520px;
+            display: none; /* Hidden by default */
+        }
+
+        .view-card.active { display: block; }
+
+        /* Package List Specifics */
+        .card-header { 
+            display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; 
+        }
+
+        .card-header h2 { color: var(--sidebar-active-text); font-size: 24px; font-weight: 800; }
+
+        .btn-add {
+            background-color: var(--btn-dark-navy); color: white; border: none;
+            padding: 8px 18px; border-radius: 8px; font-weight: 700; cursor: pointer;
+            display: flex; align-items: center; gap: 8px; font-size: 13px;
+        }
+
+        /* Table */
+        table { width: 100%; border-collapse: collapse; }
+        th { text-align: left; color: #64748b; font-weight: 800; padding-bottom: 15px; border-bottom: 1px solid #f1f5f9; }
+        td { padding: 18px 0; border-bottom: 1px solid #f1f5f9; font-size: 15px; font-weight: 600; color: #334155; }
+        .status-text { color: var(--status-green); font-weight: 800; }
+        .view-link { color: var(--action-blue); font-weight: 800; cursor: pointer; text-decoration: none; }
+
+        /* Package Details Specifics */
+        .details-header { display: flex; justify-content: flex-end; gap: 15px; margin-bottom: 25px; }
+        
+        .btn-edit { background-color: var(--btn-sky-blue); color: white; border: none; padding: 10px 25px; border-radius: 10px; font-weight: 700; cursor: pointer; }
+        .btn-back { background-color: var(--btn-dark-navy); color: white; border: none; padding: 10px 25px; border-radius: 10px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+
+        .details-title { color: var(--sidebar-active-text); font-size: 24px; font-weight: 800; border-bottom: 1px solid #f1f5f9; padding-bottom: 20px; margin-bottom: 30px; }
+        .details-grid { display: grid; grid-template-columns: 220px 1fr; gap: 20px; }
+        .label { font-weight: 800; color: var(--sidebar-active-text); font-size: 18px; }
+        .value { color: #64748b; font-weight: 600; font-size: 18px; }
+        .user-val { color: var(--user-blue); font-weight: 800; }
+        .device-val { color: var(--status-green); font-weight: 800; }
+
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-layout">
+        <header>
+            <h1 style="font-weight: 800; font-size: 24px;">Ship Tag Logo</h1>
+            <button class="btn-logout">Logout</button>
+        </header>
+
+        <div class="main-container">
+            <div class="sidebar">
+                <a href="#" class="nav-item"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+                <a href="#" class="nav-item"><i class="fa-solid fa-users"></i> Manage Users</a>
+                <a href="#" class="nav-item active"><i class="fa-solid fa-box"></i> Manage Packages</a>
+                <a href="#" class="nav-item"><i class="fa-solid fa-microchip"></i> Manage Devices</a>
+                <a href="#" class="nav-item"><i class="fa-solid fa-user"></i> My Profile</a>
+            </div>
+
+            <div class="content-area">
+                <div class="view-card active" id="packageList">
+                    <div class="card-header">
+                        <h2>Manage Packages</h2>
+                        <button class="btn-add"><i class="fa-solid fa-plus"></i> Add Package</button>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Package ID</th>
+                                <th>From</th>
+                                <th>Destination</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>#PKG-9920</td>
+                                <td>London, UK</td>
+                                <td>Karachi, Pakistan</td>
+                                <td class="status-text">In Transit</td>
+                                <td><a href="javascript:void(0)" class="view-link" onclick="showDetails()">View Details</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="view-card" id="packageDetails">
+                    <div class="details-header">
+                        <button class="btn-edit">Edit Package</button>
+                        <button class="btn-back" onclick="showList()">
+                            <i class="fa-solid fa-arrow-left"></i> Back to List
+                        </button>
+                    </div>
+                    <h2 class="details-title">Package Details & Assignment</h2>
+                    <div class="details-grid">
+                        <div class="label">Package ID:</div>
+                        <div class="value">#PKG-9920</div>
+                        <div class="label">Assigned User:</div>
+                        <div class="value user-val">Admin User</div>
+                        <div class="label">Assigned Device:</div>
+                        <div class="value device-val">#DEV-4421</div>
+                        <div class="label">Shipping Address:</div>
+                        <div class="value">Plot 45, Industrial Zone, Karachi</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showDetails() {
+            document.getElementById('packageList').classList.remove('active');
+            document.getElementById('packageDetails').classList.add('active');
+        }
+
+        function showList() {
+            document.getElementById('packageDetails').classList.remove('active');
+            document.getElementById('packageList').classList.add('active');
+        }
+    </script>
+
+</body>
+</html>

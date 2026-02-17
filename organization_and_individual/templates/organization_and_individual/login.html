@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SHIP-TAG | Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <style>
+        :root {
+            --brand-blue: #2d3e7d;
+            --input-border: #e2e8f0;
+            --accent-cyan: #00aeef;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body,
+        html {
+            height: 100%;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .auth-card {
+            background: white;
+            padding: 50px;
+            border-radius: 25px;
+            width: 500px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        .header-logo {
+            font-size: 42px;
+            font-weight: 800;
+            color: var(--brand-blue);
+            margin-bottom: 35px;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        .forgot-password {
+            display: block;
+            text-align: right;
+            margin-bottom: 30px;
+            font-size: 1rem;
+            color: var(--primary-navy);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--brand-blue);
+        }
+
+        .input-group input,
+        .input-group select {
+            width: 100%;
+            padding: 15px 15px 15px 50px;
+            border: 1.5px solid var(--input-border);
+            border-radius: 12px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .btn-main {
+            background: var(--brand-blue);
+            color: white;
+            border: none;
+            padding: 15px;
+            width: 100%;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-main:hover {
+            background-color: #1e2a5a;
+        }
+
+        .error-msg {
+            color: red;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="auth-card">
+        <div class="header-logo">🚢 SHIP TAG</div>
+
+        <!-- Django Messages -->
+        {% if messages %} {% for message in messages %}
+        <div class="error-msg">{{ message }}</div>
+        {% endfor %} {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="input-group">
+                <i class="fa-solid fa-building"></i>
+                <select name="company" required>
+                    <option value="" disabled {% if not request.POST.company %}selected{% endif %}>
+                        Select Company
+                    </option>
+
+                    {% for company in companies %}
+                    <option value="{{ company.company_name }}" {% if selected_company == company.company_name %} selected {%endif %}>
+                        {{ company.company_name }}
+                    </option>
+                    {% endfor %}
+
+                </select>
+            </div>
+
+
+            <div class="input-group">
+                <i class="fa-solid fa-user"></i>
+                <input type="email" name="email" placeholder="Email" required />
+            </div>
+
+            <div class="input-group">
+                <i class="fa-solid fa-lock"></i>
+                <input type="password" name="password" placeholder="Password" required />
+            </div>
+            <a href="/organization/forgot-password" class="forgot-password">Forgot Password?</a>
+
+            <button type="submit" class="btn-main">Login</button>
+        </form>
+    </div>
+</body>
+
+</html>

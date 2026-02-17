@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHIP-TAG | My Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --brand-blue: #2d3e7d; 
+            --header-blue: #004d80;
+            --bg-gray: #d9d9d9;
+            --input-border: #e2e8f0;
+            --accent-cyan: #00aeef; 
+            --nav-inactive: #94a3b8; /* Shaded color for inactive items */
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; transition: all 0.2s ease; }
+
+        body, html {
+            height: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-gray);
+            overflow: hidden;
+        }
+
+        /* --- HEADER --- */
+        header {
+            background-color: var(--header-blue);
+            color: white;
+            padding: 12px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .btn-logout {
+            background: transparent; color: white; border: 2px solid white;
+            padding: 8px 25px; border-radius: 12px; font-weight: 500; cursor: pointer;
+        }
+
+        /* --- LAYOUT --- */
+        .main-container { display: flex; height: calc(100vh - 55px); padding: 20px; gap: 20px; width: 100%; }
+        
+        /* --- SIDEBAR UPDATED --- */
+        .sidebar { width: 280px; background: white; border-radius: 15px; padding: 20px; display: flex; flex-direction: column; }
+        
+        .nav-item { 
+            padding: 12px 15px; 
+            margin-bottom: 10px; 
+            border-radius: 10px; 
+            cursor: pointer; 
+            color: var(--nav-inactive); /* Default Shaded State */
+            font-weight: 500; 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+            transition: 0.3s;
+        }
+
+        /* Highlighted / Active State */
+        .nav-item.active-nav { 
+            background-color: #eef6ff; 
+            color: var(--header-blue); 
+            font-weight: 700; 
+        }
+
+        .nav-item:hover:not(.active-nav) {
+            color: var(--header-blue);
+            background-color: #f8fafc;
+        }
+
+        /* --- PROFILE CARD --- */
+        .content-view { flex: 1; overflow-y: auto; }
+        .management-card { background: white; border-radius: 20px; padding: 35px; min-height: 100%; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        
+        .profile-header-flex { display: flex; align-items: center; gap: 25px; margin-bottom: 30px; border-bottom: 1px solid #f1f5f9; padding-bottom: 25px; }
+        .profile-pic-wrapper { position: relative; width: 110px; height: 110px; }
+        .profile-pic-circle { width: 100%; height: 100%; border-radius: 50%; background: #f1f5f9; display: flex; align-items: center; justify-content: center; border: 1px solid #e2e8f0; overflow: hidden; }
+        .profile-pic-circle i { font-size: 50px; color: #cbd5e1; }
+        .cam-edit-btn { position: absolute; bottom: 5px; right: 5px; background: var(--accent-cyan); color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid white; cursor: pointer; font-size: 14px; }
+        
+        .profile-title-text h2 { font-size: 24px; color: #1e293b; font-weight: 700; }
+        .profile-top-actions { margin-left: auto; display: flex; gap: 12px; }
+        .btn-profile-cyan { background: var(--accent-cyan); color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 14px; }
+
+        /* --- TABS --- */
+        .profile-nav-tabs { display: flex; gap: 30px; margin-bottom: 25px; border-bottom: 1px solid #e2e8f0; }
+        .profile-tab { padding-bottom: 12px; cursor: pointer; font-weight: 600; color: #94a3b8; position: relative; }
+        .profile-tab.active-profile-tab { color: #2e7d32; }
+        .profile-tab.active-profile-tab::after { content: ''; position: absolute; bottom: -1px; left: 0; width: 100%; height: 3px; background: #2e7d32; }
+
+        .profile-info-grid { display: none; flex-direction: column; gap: 20px; }
+        .profile-info-grid.active-tab-content { display: flex; }
+        .info-row { display: grid; grid-template-columns: 220px 1fr; align-items: center; }
+        .info-label { font-weight: 700; color: #1e293b; font-size: 15px; }
+        .info-data { color: #64748b; font-size: 15px; }
+
+        /* --- MODAL --- */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.5); display: none;
+            justify-content: center; align-items: center; z-index: 1000;
+        }
+        .fancy-modal {
+            background: white; width: 450px; padding: 40px;
+            border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            position: relative; text-align: center;
+        }
+        .btn-main { background: var(--brand-blue); color: white; border: none; padding: 12px; width: 100%; border-radius: 50px; font-weight: 600; cursor: pointer; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+    <div id="modal-password" class="modal-overlay">
+        <div class="fancy-modal">
+            <h2 style="margin-bottom: 20px; color: var(--header-blue);">Reset Password</h2>
+            <input type="password" placeholder="New Password" style="width:100%; padding:10px; margin-bottom:10px; border:1px solid #ddd; border-radius:8px;">
+            <input type="password" placeholder="Confirm New Password" style="width:100%; padding:10px; margin-bottom:10px; border:1px solid #ddd; border-radius:8px;">
+            <button class="btn-main" onclick="closeModal()">Update Password</button>
+            <p style="margin-top: 15px; color: #94a3b8; cursor: pointer;" onclick="closeModal()">Cancel</p>
+        </div>
+    </div>
+
+    <header>
+        <h2 style="font-weight: 800;">Ship Tag Logo</h2>
+        <button class="btn-logout">Logout</button>
+    </header>
+
+    <div class="main-container">
+        <div class="sidebar">
+            <div class="nav-item" onclick="setActive(this)"><i class="fa-solid fa-chart-line"></i> Dashboard</div>
+            <div class="nav-item" onclick="setActive(this)"><i class="fa-solid fa-users"></i> Manage Users</div>
+            <div class="nav-item" onclick="setActive(this)"><i class="fa-solid fa-box"></i> Manage Packages</div>
+            <div class="nav-item" onclick="setActive(this)"><i class="fa-solid fa-microchip"></i> Manage Devices</div>
+            <div class="nav-item active-nav" onclick="setActive(this)"><i class="fa-solid fa-user-circle"></i> My Profile</div>
+            
+            <div style="margin-top:auto;">
+                <h3 style="color: #004d80; font-size: 24px;">Need Help ?</h3>
+                <button style="background:#004d80; color:white; width:100%; padding:12px; border:none; border-radius:5px; cursor:pointer; font-weight:bold;">Chat With Us</button>
+            </div>
+        </div>
+
+        <div class="content-view">
+            <div class="management-card">
+                <div class="profile-header-flex">
+                    <div class="profile-pic-wrapper">
+                        <div class="profile-pic-circle"><i class="fa-solid fa-user"></i></div>
+                        <div class="cam-edit-btn"><i class="fa-solid fa-camera"></i></div>
+                    </div>
+                    <div class="profile-title-text"><h2>My Profile</h2></div>
+                    <div class="profile-top-actions">
+                        <button class="btn-profile-cyan">Edit Profile</button>
+                        <button class="btn-profile-cyan" onclick="openModal()">Change Password</button>
+                    </div>
+                </div>
+
+                <div class="profile-nav-tabs">
+                    <div class="profile-tab active-profile-tab" onclick="switchProfileTab('general-info-tab', this)">General Information</div>
+                    <div class="profile-tab" onclick="switchProfileTab('address-info-tab', this)">Address Info</div>
+                </div>
+                
+                <div id="general-info-tab" class="profile-info-grid active-tab-content">
+                    <div class="info-row"><span class="info-label">User Id</span><span class="info-data">2813fe04-fe1a-4b3b-8591-ac2f60abf5d3</span></div>
+                    <div class="info-row"><span class="info-label">Name</span><span class="info-data">Admin User</span></div>
+                    <div class="info-row"><span class="info-label">Organization</span><span class="info-data">SHIP-TAG Global Logistics</span></div>
+                    <div class="info-row"><span class="info-label">Email</span><span class="info-data">admin@shiptag.com</span></div>
+                    <div class="info-row"><span class="info-label">Phone Number</span><span class="info-data">+1 234 567 890</span></div>
+                    <div class="info-row"><span class="info-label">Created at</span><span class="info-data">January 13, 2025</span></div>
+                </div>
+
+                <div id="address-info-tab" class="profile-info-grid">
+                    <div class="info-row"><span class="info-label">Address</span><span class="info-data">123 Logistics Way, London, UK</span></div>
+                    <div class="info-row"><span class="info-label">Postal Code</span><span class="info-data">EC1A 1BB</span></div>
+                    <div class="info-row"><span class="info-label">Country</span><span class="info-data">United Kingdom</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Highlighting Logic
+        function setActive(element) {
+            // Remove 'active-nav' from all items (shading them)
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active-nav');
+            });
+            // Add 'active-nav' to the clicked item (highlighting it)
+            element.classList.add('active-nav');
+        }
+
+        function switchProfileTab(tabId, el) {
+            document.querySelectorAll('.profile-tab').forEach(t => t.classList.remove('active-profile-tab'));
+            document.querySelectorAll('.profile-info-grid').forEach(g => g.classList.remove('active-tab-content'));
+            el.classList.add('active-profile-tab');
+            document.getElementById(tabId).classList.add('active-tab-content');
+        }
+
+        function openModal() { document.getElementById('modal-password').style.display = 'flex'; }
+        function closeModal() { document.getElementById('modal-password').style.display = 'none'; }
+    </script>
+</body>
+</html>

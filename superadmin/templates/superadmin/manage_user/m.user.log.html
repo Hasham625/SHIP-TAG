@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHIP-TAG | User Log</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --header-blue: #004d80;
+            --bg-gray: #d9d9d9;
+            --accent-blue: #d1e8ff;
+            --text-gray: #64748b;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; transition: all 0.2s ease; }
+
+        body, html {
+            height: 100%;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #ffffff;
+            overflow: hidden;
+        }
+
+        .dashboard-layout { display: flex; flex-direction: column; height: 100vh; background-color: var(--bg-gray); }
+        
+        header {
+            background-color: var(--header-blue);
+            color: white;
+            padding: 12px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn-logout {
+            background: transparent; color: white; border: 2px solid white;
+            padding: 8px 25px; border-radius: 12px; font-weight: 500; cursor: pointer;
+        }
+
+        .main-container { display: flex; flex: 1; padding: 20px; gap: 20px; overflow: hidden; }
+        
+        /* SIDEBAR */
+        .sidebar { width: 280px; background: white; border-radius: 15px; padding: 20px; display: flex; flex-direction: column; }
+        .nav-item { 
+            padding: 12px 15px; margin-bottom: 5px; border-radius: 5px; 
+            color: #004d80; font-weight: 600; display: flex; align-items: center; 
+            gap: 10px; cursor: pointer; 
+        }
+        .nav-item.active-nav { background-color: var(--accent-blue); }
+        .nav-item.disabled-nav { opacity: 0.3; cursor: not-allowed; pointer-events: none; }
+
+        .sub-menu { display: flex; flex-direction: column; padding-left: 35px; margin-bottom: 10px; }
+        .sub-item { padding: 8px 10px; font-size: 14px; color: var(--text-gray); font-weight: 500; cursor: pointer; border-radius: 4px; }
+        .sub-item.active-sub { color: var(--header-blue); font-weight: 700; background: #f0f7ff; }
+
+        /* CONTENT AREA */
+        .content-view { flex: 1; display: block; overflow-y: auto; padding-right: 10px; }
+        .view-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; min-height: 45px; }
+
+        /* CARD & TABLE STYLES */
+        .flex-card { background: white; border-radius: 20px; padding: 25px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); min-height: 550px; display: flex; flex-direction: column; }
+        .flex-card h3 { color: #000; font-size: 18px; margin-bottom: 20px; }
+
+        /* SEARCH BAR */
+        .search-container { position: relative; margin-bottom: 20px; width: 300px; }
+        .search-container input {
+            width: 100%; padding: 10px 15px 10px 40px; border: 1px solid #e2e8f0;
+            border-radius: 10px; outline: none; font-size: 14px;
+        }
+        .search-container i { position: absolute; left: 15px; top: 12px; color: var(--text-gray); }
+
+        /* DATA TABLE */
+        .data-table { width: 100%; border-collapse: collapse; }
+        .data-table thead tr { background: #f8fafc; border-bottom: 2px solid #edf2f7; text-align: left; }
+        .data-table th { padding: 12px 20px; color: var(--header-blue); font-size: 14px; font-weight: 700; }
+        .data-table td { padding: 15px 20px; font-size: 14px; color: #475569; border-bottom: 1px solid #f1f5f9; }
+
+        .status-badge { padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 600; background: #e0f2fe; color: #0369a1; }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-layout">
+        <header>
+            <h2 style="font-weight: 800;">Ship Tag Logo</h2>
+            <button class="btn-logout">Logout</button>
+        </header>
+
+        <div class="main-container">
+            <div class="sidebar">
+                <div class="nav-item disabled-nav"><i class="fa-solid fa-chart-line"></i> Dashboard</div>
+                <div class="nav-item active-nav">
+                    <i class="fa-solid fa-users"></i> Manage Users
+                    <i class="fa-solid fa-chevron-down" style="margin-left: auto; font-size: 12px;"></i>
+                </div>
+                <div class="sub-menu">
+                    <div class="sub-item">Manage User</div>
+                    <div class="sub-item active-sub">User Log</div>
+                </div>
+                <div class="nav-item disabled-nav"><i class="fa-solid fa-box"></i> Manage Packages</div>
+                <div class="nav-item disabled-nav"><i class="fa-solid fa-microchip"></i> Manage Devices</div>
+                <div class="nav-item disabled-nav"><i class="fa-solid fa-user-circle"></i> My Profile</div>
+            </div>
+
+            <div class="content-view">
+                <div class="view-header">
+                    <h2 style="color: var(--header-blue); font-weight: 700;">User Log</h2>
+                </div>
+
+                <div class="flex-card">
+                    <h3>Recent User Activity Log</h3>
+                    
+                    <div class="search-container">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" placeholder="Search logs...">
+                    </div>
+
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Serial</th>
+                                <th>Changed By</th>
+                                <th>Change Of</th>
+                                <th>Change</th>
+                                <th>Changed At</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>01</td>
+                                <td>Admin_Alpha</td>
+                                <td>Sarah Jenkins</td>
+                                <td><span class="status-badge">Updated Email</span></td>
+                                <td>Feb 17, 2026 - 10:30 AM</td>
+                            </tr>
+                            <tr>
+                                <td>02</td>
+                                <td>Super_User</td>
+                                <td>Global Logistics</td>
+                                <td><span class="status-badge">Reset Password</span></td>
+                                <td>Feb 16, 2026 - 02:15 PM</td>
+                            </tr>
+                            <tr>
+                                <td>03</td>
+                                <td>Admin_Beta</td>
+                                <td>Michael Chen</td>
+                                <td><span class="status-badge">Added Device</span></td>
+                                <td>Feb 15, 2026 - 09:45 AM</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHIP-TAG | Organisation Data</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --brand-blue: #2d3e7d; 
+            --header-blue: #004d80;
+            --bg-gray: #d9d9d9;
+            --accent-blue: #d1e8ff;
+            --text-gray: #64748b;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; transition: all 0.3s ease; }
+
+        body, html {
+            height: 100%;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #ffffff;
+            overflow: hidden;
+        }
+
+        .dashboard-layout { display: flex; flex-direction: column; height: 100vh; background-color: var(--bg-gray); }
+        
+        header {
+            background-color: var(--header-blue);
+            color: white;
+            padding: 12px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn-logout {
+            background: transparent; color: white; border: 2px solid white;
+            padding: 8px 25px; border-radius: 12px; font-weight: 500; cursor: pointer;
+        }
+
+        .main-container { display: flex; flex: 1; padding: 20px; gap: 20px; overflow: hidden; }
+        
+        /* SIDEBAR */
+        .sidebar { width: 280px; background: white; border-radius: 15px; padding: 20px; display: flex; flex-direction: column; }
+        .nav-item { 
+            padding: 12px 15px; margin-bottom: 5px; border-radius: 5px; 
+            color: #004d80; font-weight: 600; display: flex; align-items: center; 
+            gap: 10px; cursor: pointer; 
+        }
+        .nav-item.active-nav { background-color: var(--accent-blue); }
+        .nav-item.disabled-nav { opacity: 0.3; cursor: not-allowed; pointer-events: none; }
+
+        .sub-menu { display: flex; flex-direction: column; padding-left: 35px; margin-bottom: 10px; }
+        .sub-item { padding: 8px 10px; font-size: 14px; color: var(--text-gray); font-weight: 500; cursor: pointer; border-radius: 4px; }
+        .sub-item.active-sub { color: var(--header-blue); font-weight: 700; background: #f0f7ff; }
+
+        /* CONTENT AREA */
+        .content-view { flex: 1; display: block; overflow-y: auto; padding-right: 10px; }
+        .view-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+
+        .btn-primary {
+            background-color: var(--header-blue); color: white; border: none;
+            padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer;
+            display: flex; align-items: center; gap: 8px;
+        }
+
+        /* CARD STYLES */
+        .flex-card { background: white; border-radius: 20px; padding: 35px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); min-height: 550px; }
+        .flex-card h3 { color: #000; font-size: 18px; margin-bottom: 25px; border-bottom: 1px solid #f1f5f9; padding-bottom: 10px; }
+
+        /* DATA ROW STYLES */
+        .data-row-container { display: flex; flex-direction: column; gap: 15px; margin-bottom: 40px;}
+        .data-row { display: flex; align-items: center; font-size: 15px; }
+        .field-label { font-weight: 700; color: var(--header-blue); width: 220px; }
+        .field-value { color: #475569; }
+
+        /* USER LIST TABLE STYLES */
+        .user-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        .user-table th { text-align: left; padding: 12px; color: var(--header-blue); font-size: 14px; border-bottom: 2px solid #f1f5f9; }
+        .user-table td { padding: 12px; font-size: 14px; color: #475569; border-bottom: 1px solid #f1f5f9; }
+        .view-icon { color: var(--header-blue); cursor: pointer; }
+
+        .back-link { color: var(--header-blue); text-decoration: none; font-size: 14px; display: flex; align-items: center; gap: 5px; margin-bottom: 15px; cursor: pointer; }
+
+        /* MODAL STYLES */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(5px);
+            display: none; justify-content: center; align-items: center; z-index: 1000;
+        }
+        .modal-box {
+            background: white; width: 400px; border-radius: 20px; padding: 30px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2); position: relative;
+        }
+        .modal-header { margin-bottom: 20px; text-align: center; }
+        .modal-header h2 { color: var(--header-blue); font-size: 20px; }
+        
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-size: 13px; font-weight: 700; color: var(--header-blue); }
+        .form-group input {
+            width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 10px; outline: none; font-size: 14px;
+        }
+
+        .btn-submit {
+            width: 100%; background: var(--header-blue); color: white; border: none;
+            padding: 12px; border-radius: 10px; font-weight: 700; cursor: pointer; margin-top: 10px;
+        }
+        .close-btn { position: absolute; top: 15px; right: 15px; cursor: pointer; color: var(--text-gray); }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-layout">
+        <header>
+            <h2 style="font-weight: 800;">Ship Tag Logo</h2>
+            <button class="btn-logout">Logout</button>
+        </header>
+
+        <div class="main-container">
+            <div class="sidebar">
+                <div class="nav-item disabled-nav"><i class="fa-solid fa-chart-line"></i> Dashboard</div>
+                <div class="nav-item active-nav">
+                    <i class="fa-solid fa-users"></i> Manage Users
+                    <i class="fa-solid fa-chevron-down" style="margin-left: auto; font-size: 12px;"></i>
+                </div>
+                <div class="sub-menu">
+                    <div class="sub-item active-sub">Manage User</div>
+                    <div class="sub-item">User Log</div>
+                </div>
+                <div class="nav-item disabled-nav"><i class="fa-solid fa-box"></i> Manage Packages</div>
+                <div class="nav-item disabled-nav"><i class="fa-solid fa-microchip"></i> Manage Devices</div>
+                <div class="nav-item disabled-nav"><i class="fa-solid fa-user-circle"></i> My Profile</div>
+            </div>
+
+            <div class="content-view">
+                <div class="view-header">
+                    <div>
+                        <div class="back-link" onclick="window.history.back()"><i class="fa-solid fa-arrow-left"></i> Back to Directory</div>
+                        <h2 style="color: var(--header-blue); font-weight: 700;">Organisation Data</h2>
+                    </div>
+                    
+                    <button class="btn-primary" onclick="openModal()">
+                        <i class="fa-solid fa-user-plus"></i> Add User
+                    </button>
+                </div>
+
+                <div class="flex-card">
+                    <h3>Organisation Information</h3>
+                    
+                    <div class="data-row-container">
+                        <div class="data-row">
+                            <span class="field-label">Organisation Name:</span>
+                            <span class="field-value">Global Logistics Ltd.</span>
+                        </div>
+                        <div class="data-row">
+                            <span class="field-label">Primary Contact Email:</span>
+                            <span class="field-value">contact@globallogistics.com</span>
+                        </div>
+                        <div class="data-row">
+                            <span class="field-label">Organisation Type:</span>
+                            <span class="field-value">Logistics & Supply Chain</span>
+                        </div>
+                        <div class="data-row">
+                            <span class="field-label">Registered Date:</span>
+                            <span class="field-value">Oct 12, 2025</span>
+                        </div>
+                        <div class="data-row">
+                            <span class="field-label">Total Allocated Devices:</span>
+                            <span class="field-value">150</span>
+                        </div>
+                        <div class="data-row">
+                            <span class="field-label">Location / HQ:</span>
+                            <span class="field-value">New York, USA</span>
+                        </div>
+                    </div>
+
+                    <h3>User List</h3>
+                    <table class="user-table">
+                        <thead>
+                            <tr>
+                                <th>User ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>View</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>#USR-101</td>
+                                <td>Sarah Jenkins</td>
+                                <td>sarah.j@globallog.com</td>
+                                <td><i class="fa-solid fa-eye view-icon"></i></td>
+                            </tr>
+                            <tr>
+                                <td>#USR-102</td>
+                                <td>Michael Chen</td>
+                                <td>m.chen@globallog.com</td>
+                                <td><i class="fa-solid fa-eye view-icon"></i></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="userModal">
+        <div class="modal-box">
+            <i class="fa-solid fa-xmark close-btn" onclick="closeModal()"></i>
+            <div class="modal-header">
+                <h2>Add New User</h2>
+                <p style="font-size: 12px; color: var(--text-gray);">Assign a user to this organisation</p>
+            </div>
+            
+            <div class="form-group">
+                <label>FULL NAME</label>
+                <input type="text" placeholder="Enter user's name">
+            </div>
+
+            <div class="form-group">
+                <label>EMAIL ADDRESS</label>
+                <input type="email" placeholder="user@domain.com">
+            </div>
+
+            <button class="btn-submit" onclick="closeModal()">Create User</button>
+        </div>
+    </div>
+
+    <script>
+        function openModal() {
+            document.getElementById('userModal').style.display = 'flex';
+        }
+        function closeModal() {
+            document.getElementById('userModal').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

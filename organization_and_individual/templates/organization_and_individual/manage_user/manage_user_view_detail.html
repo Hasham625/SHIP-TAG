@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Detail View | SHIP-TAG</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --header-blue: #1b4370;
+            --bg-gray: #d9d9d9;
+            --accent-cyan: #7cb9e8;
+            --accent-green: #487e4c;
+            --border-light: #e2e8f0;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; transition: all 0.2s ease; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg-gray); padding: 40px; display: flex; justify-content: center; }
+
+        .management-card { background: white; border-radius: 30px; padding: 45px; width: 100%; max-width: 1100px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        
+        .action-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .view-title { font-size: 28px; color: var(--header-blue); font-weight: 800; }
+        
+        .btn-group { display: flex; gap: 10px; }
+        .btn-action { background: var(--accent-cyan); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 700; cursor: pointer; }
+        .btn-back { background: var(--header-blue); color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; text-decoration: none; font-weight: bold; }
+
+        .tabs { display: flex; gap: 30px; border-bottom: 1px solid #f0f2f5; margin-bottom: 25px; }
+        .tab { padding-bottom: 10px; font-weight: 800; color: #94a3b8; cursor: pointer; border-bottom: 3px solid transparent; }
+        .tab.active { color: var(--accent-green); border-bottom: 3px solid var(--accent-green); }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        .info-row { display: grid; grid-template-columns: 220px 1fr; padding: 12px 0; font-size: 16px; }
+        .info-label { font-weight: 800; color: #1e293b; }
+        .info-data { color: #64748b; font-weight: 600; }
+        .status-active { color: var(--accent-green); font-weight: 800; }
+
+        .section-header { font-size: 24px; color: var(--header-blue); font-weight: 800; margin: 40px 0 25px 0; border-top: 1px solid #f1f5f9; padding-top: 30px; }
+
+        /* MODAL */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(5px); display: none; justify-content: center; align-items: center; z-index: 999; }
+        .fancy-box { background: white; width: 400px; border-radius: 25px; padding: 40px; text-align: center; }
+        .fancy-input { width: 100%; padding: 14px; border: 1.5px solid #e2e8f0; border-radius: 12px; margin-bottom: 15px; outline: none; }
+    </style>
+</head>
+<body>
+
+    <div class="management-card">
+        <div class="action-header">
+            <h2 class="view-title">Personal Information</h2>
+            <div class="btn-group">
+                <button class="btn-action">Edit Profile</button>
+                <button class="btn-action" onclick="openFancyBox()">Change Password</button>
+                <a href="users.html" class="btn-back"><i class="fa-solid fa-arrow-left"></i> &nbsp; Back</a>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <div id="tab-gen" class="tab active" onclick="showTab('general')">General Information</div>
+            <div id="tab-addr" class="tab" onclick="showTab('address')">Address Info</div>
+        </div>
+
+        <div id="general" class="tab-content active">
+            <div class="info-row"><span class="info-label">User Id</span><span class="info-data">#USR-001</span></div>
+            <div class="info-row"><span class="info-label">Full Name</span><span class="info-data">Admin User</span></div>
+            <div class="info-row"><span class="info-label">Email Address</span><span class="info-data">admin@shiptag.com</span></div>
+            <div class="info-row"><span class="info-label">Account Status</span><span class="status-active">Active</span></div>
+
+            <h3 class="section-header">Package Information</h3>
+            <div class="info-row"><span class="info-label">Device Type</span><span class="info-data">GPS Tracker Pro v2</span></div>
+            <div class="info-row"><span class="info-label">Shipping Address</span><span class="info-data">Plot 45, Industrial Zone, Karachi, Pakistan</span></div>
+        </div>
+
+        <div id="address" class="tab-content">
+            <div class="info-row"><span class="info-label">Address</span><span class="info-data">123 Logistics Way, London, UK</span></div>
+        </div>
+    </div>
+
+    <div id="modal-pass" class="modal-overlay">
+        <div class="fancy-box">
+            <h2 style="color:var(--header-blue); margin-bottom:20px;">Reset Password</h2>
+            <input type="password" class="fancy-input" placeholder="New Password">
+            <input type="password" class="fancy-input" placeholder="Confirm Password">
+            <button class="btn-action" style="width:100%; padding:15px; border-radius:50px;" onclick="closeFancyBox()">Update Password</button>
+            <p style="margin-top: 15px; color: #94a3b8; cursor: pointer;" onclick="closeFancyBox()">Cancel</p>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.getElementById(tabName).classList.add('active');
+            if(tabName === 'general') document.getElementById('tab-gen').classList.add('active');
+            else document.getElementById('tab-addr').classList.add('active');
+        }
+
+        function openFancyBox() { document.getElementById('modal-pass').style.display = 'flex'; }
+        function closeFancyBox() { document.getElementById('modal-pass').style.display = 'none'; }
+    </script>
+</body>
+</html>

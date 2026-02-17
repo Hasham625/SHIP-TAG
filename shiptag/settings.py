@@ -37,7 +37,14 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+
+    "rest_framework",
+    "end_users",
+    "organization_and_individual",
+    "superadmin",
+    "corsheaders",
 ]
+
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -73,9 +80,16 @@ WSGI_APPLICATION = "shiptag.wsgi.application"
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'shiptag',
+        'USER': 'postgres',
+        'PASSWORD': 'hasham2004',
+        'HOST': 'localhost',  # Replace with your PostgreSQL server's address if necessary
+        'PORT': '5432', 
+        'OPTIONS': {
+        'options': '-c search_path=public,django,static' 
+            },         # Leave empty to use the default PostgreSQL port (usually 5432)
     }
 }
 
@@ -115,3 +129,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = "static/"
+
+
+
+# settings.py
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'         # or your email provider
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'hashamnadeem876@gmail.com'
+EMAIL_HOST_PASSWORD = 'iozf tltt djwl wwuo'
+

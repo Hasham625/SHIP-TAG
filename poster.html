@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ship Tag - Smart Maritime Inspection & Vessel Management System</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #e8eaf0;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      padding: 30px 10px;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .poster {
+      width: 480px;
+      background: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 6px 30px rgba(0,0,0,0.18);
+    }
+
+    /* ── HEADER ── */
+    .header {
+      background: linear-gradient(135deg, #0d2d6b 0%, #1a4fa8 60%, #1565c0 100%);
+      padding: 14px 20px 12px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .header-logo {
+      width: 48px;
+      height: 48px;
+      background: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 9px;
+      font-weight: 800;
+      color: #0d2d6b;
+      text-align: center;
+      line-height: 1.2;
+      padding: 4px;
+    }
+    .header-text h1 {
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+    .header-text p {
+      color: #b3cdf5;
+      font-size: 10px;
+    }
+
+    /* ── TITLE BAND ── */
+    .title-band {
+      background: #f5f8ff;
+      border-bottom: 2px solid #d0dff5;
+      padding: 16px 20px 14px;
+      text-align: center;
+    }
+    .title-band h2 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #0d2d6b;
+      line-height: 1.3;
+    }
+
+    /* ── SECTION CARD ── */
+    .section {
+      margin: 12px 14px;
+      border: 1.5px solid #c8d8f0;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .section-header {
+      background: linear-gradient(90deg, #0d2d6b, #1a4fa8);
+      color: #fff;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 6px 10px;
+      letter-spacing: 0.4px;
+    }
+    .section-body {
+      background: #fafdff;
+      padding: 12px 14px;
+    }
+
+    /* ── ABSTRACT ── */
+    .abstract-body {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .abstract-icon {
+      font-size: 34px;
+      flex-shrink: 0;
+      line-height: 1;
+    }
+    .abstract-body p {
+      font-size: 10.5px;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    /* ── SYSTEM OVERVIEW ── */
+    .overview-flow {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 4px;
+    }
+    .flow-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      flex: 1;
+    }
+    .flow-icon {
+      font-size: 28px;
+      line-height: 1;
+    }
+    .flow-label {
+      font-size: 9px;
+      color: #444;
+      font-weight: 600;
+      text-align: center;
+      line-height: 1.3;
+    }
+    .flow-arrow {
+      font-size: 18px;
+      color: #1a4fa8;
+      font-weight: bold;
+      flex-shrink: 0;
+    }
+    .flow-screen {
+      width: 80px;
+      height: 52px;
+      background: #e8f0fe;
+      border: 1.5px solid #90b4f5;
+      border-radius: 4px;
+      display: flex;
+      flex-direction: column;
+      padding: 4px 5px;
+      gap: 3px;
+    }
+    .screen-bar {
+      height: 5px;
+      background: #1a4fa8;
+      border-radius: 2px;
+    }
+    .screen-bar.short { width: 55%; background: #90b4f5; }
+    .screen-bar.med   { width: 80%; }
+    .screen-row {
+      display: flex;
+      gap: 3px;
+    }
+    .screen-block {
+      flex: 1;
+      height: 18px;
+      background: #bed2fb;
+      border-radius: 2px;
+    }
+
+    /* ── KEY FEATURES ── */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    .feature-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      text-align: center;
+    }
+    .feature-icon-box {
+      width: 46px;
+      height: 46px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #e8f0fe, #c7dcff);
+      border: 1.5px solid #90b4f5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+    }
+    .feature-label {
+      font-size: 9.5px;
+      font-weight: 600;
+      color: #1a1a2e;
+      line-height: 1.3;
+    }
+
+    /* ── TECHNOLOGIES ── */
+    .tech-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .tech-badge {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 800;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .tech-python  { background: #3776ab; color: #ffd343; }
+    .tech-django  { background: #092e20; color: #44b78b; }
+    .tech-postgres { background: #336791; color: #fff; }
+    .tech-html    { background: #e34c26; color: #fff; }
+    .tech-css     { background: #264de4; color: #fff; }
+    .tech-bootstrap { background: #7952b3; color: #fff; }
+    .tech-js      { background: #f7df1e; color: #000; }
+
+    /* ── APPLICATIONS ── */
+    .apps-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-around;
+      gap: 6px;
+    }
+    .app-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      text-align: center;
+      flex: 1;
+    }
+    .app-icon-box {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #e8f4f8, #b3d9f5);
+      border: 2px solid #5bacda;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+    .app-label {
+      font-size: 9px;
+      font-weight: 600;
+      color: #1a1a2e;
+      line-height: 1.3;
+    }
+
+    /* ── FOOTER ── */
+    .footer {
+      background: linear-gradient(135deg, #0d2d6b, #1a4fa8);
+      color: #fff;
+      text-align: center;
+      padding: 10px 14px;
+      font-size: 10px;
+      line-height: 1.8;
+    }
+    .footer strong { font-weight: 700; }
+  </style>
+</head>
+<body>
+<div class="poster">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-logo">
+      <div>
+        <div style="font-size:14px;">🦅</div>
+        <div>GIKI</div>
+      </div>
+    </div>
+    <div class="header-text">
+      <h1>Ghulam Ishaq Khan Institute of Engineering Sciences and Technology</h1>
+      <p>Department of Computer Science</p>
+    </div>
+  </div>
+
+  <!-- TITLE -->
+  <div class="title-band">
+    <h2>Ship Tag – Smart Maritime Inspection<br>&amp; Vessel Management System</h2>
+  </div>
+
+  <!-- ABSTRACT -->
+  <div class="section">
+    <div class="section-header">Abstract</div>
+    <div class="section-body">
+      <div class="abstract-body">
+        <div class="abstract-icon">⚓</div>
+        <p>Ship Tag is a web-based platform for secure and efficient management of ship inspections, vessel records, tagging, and maritime data.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SYSTEM OVERVIEW -->
+  <div class="section">
+    <div class="section-header">System Overview</div>
+    <div class="section-body">
+      <div class="overview-flow">
+        <div class="flow-item">
+          <div class="flow-icon">👤</div>
+          <div class="flow-label">User</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">
+          <div class="flow-icon">🌐</div>
+          <div class="flow-label">Web App</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">
+          <div class="flow-icon">🐍</div>
+          <div class="flow-label">Django<br>Backend</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">
+          <div class="flow-icon">🗄️</div>
+          <div class="flow-label">PostgreSQL<br>Database</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-item">
+          <div class="flow-screen">
+            <div class="screen-bar med"></div>
+            <div class="screen-bar short"></div>
+            <div class="screen-row">
+              <div class="screen-block"></div>
+              <div class="screen-block"></div>
+            </div>
+          </div>
+          <div class="flow-label">Dashboard</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KEY FEATURES -->
+  <div class="section">
+    <div class="section-header">Key Features</div>
+    <div class="section-body">
+      <div class="features-grid">
+        <div class="feature-item">
+          <div class="feature-icon-box">🔒</div>
+          <div class="feature-label">Secure<br>Authentication</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon-box">🚢</div>
+          <div class="feature-label">Vessel Registration<br>&amp; Tagging</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon-box">📊</div>
+          <div class="feature-label">Dashboard<br>Analytics</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon-box">📋</div>
+          <div class="feature-label">Inspection Report<br>Management</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon-box">🔍</div>
+          <div class="feature-label">Search &amp;<br>Filtering System</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon-box">💾</div>
+          <div class="feature-label">Database<br>Management</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TECHNOLOGIES USED -->
+  <div class="section">
+    <div class="section-header">Technologies Used</div>
+    <div class="section-body">
+      <div class="tech-row">
+        <div class="tech-badge tech-python">🐍</div>
+        <div class="tech-badge tech-django" style="font-size:13px; font-family:serif;">D</div>
+        <div class="tech-badge tech-postgres" style="font-size:13px;">🐘</div>
+        <div class="tech-badge tech-html" style="font-size:13px; font-weight:900;">H5</div>
+        <div class="tech-badge tech-css" style="font-size:13px; font-weight:900;">CSS</div>
+        <div class="tech-badge tech-bootstrap" style="font-size:13px; font-weight:900;">B</div>
+        <div class="tech-badge tech-js" style="font-size:13px; font-weight:900;">JS</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- APPLICATIONS -->
+  <div class="section">
+    <div class="section-header">Applications</div>
+    <div class="section-body">
+      <div class="apps-row">
+        <div class="app-item">
+          <div class="app-icon-box">⚓</div>
+          <div class="app-label">Maritime<br>Authorities</div>
+        </div>
+        <div class="app-item">
+          <div class="app-icon-box">🏗️</div>
+          <div class="app-label">Port<br>Management</div>
+        </div>
+        <div class="app-item">
+          <div class="app-icon-box">🔍</div>
+          <div class="app-label">Ship Inspection<br>Agencies</div>
+        </div>
+        <div class="app-item">
+          <div class="app-icon-box">☁️</div>
+          <div class="app-label">Digital Record<br>Keeping</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <strong>Supervisor: Dr. Muhammad Ali</strong><br>
+    Group Members:<br>
+    2020-CS-001 – Ali Khan<br>
+    2020-CS-002 – Sara Ahmed<br>
+    2020-CS-003 – Zain Malik
+  </div>
+
+</div>
+</body>
+</html>

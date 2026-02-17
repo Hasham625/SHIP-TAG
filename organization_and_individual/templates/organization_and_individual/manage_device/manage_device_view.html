@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Device Details | SHIP-TAG</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        :root { 
+            --brand-blue: #1e3a8a; 
+            --header-blue: #003366; 
+            --bg-gray: #e5e7eb; 
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: var(--bg-gray); padding: 20px; }
+
+        .header-actions { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            margin-bottom: 20px; 
+        }
+
+        .back-btn { 
+            background: #1f2937; 
+            color: white; 
+            text-decoration: none; 
+            padding: 10px 20px; 
+            border-radius: 8px; 
+            font-weight: 600; 
+            display: flex; 
+            align-items: center; 
+            gap: 8px; 
+        }
+
+        .remove-btn { 
+            background: #dc2626; 
+            color: white; 
+            border: none; 
+            padding: 10px 20px; 
+            border-radius: 8px; 
+            font-weight: 600; 
+            cursor: pointer; 
+        }
+
+        .white-card { 
+            background: white; 
+            border-radius: 25px; 
+            padding: 40px; 
+            margin-bottom: 20px; 
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); 
+        }
+
+        .title { 
+            color: var(--header-blue); 
+            font-size: 24px; 
+            margin-bottom: 20px; 
+            border-bottom: 1px solid #eee; 
+            padding-bottom: 10px; 
+        }
+
+        .grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 20px; 
+        }
+
+        .input-box label { 
+            display: block; 
+            margin-bottom: 8px; 
+            font-weight: 700; 
+            color: #374151; 
+        }
+
+        .input-box input { 
+            width: 100%; 
+            padding: 12px; 
+            border: 1.5px solid #e5e7eb; 
+            border-radius: 12px; 
+        }
+
+        .btn-save { 
+            background: #3f51b5; 
+            color: white; 
+            border: none; 
+            padding: 15px 35px; 
+            border-radius: 12px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            margin-top: 20px; 
+        }
+
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin-top: 10px; 
+        }
+
+        th { 
+            text-align: left; 
+            padding: 12px; 
+            color: #6b7280; 
+            border-bottom: 1.5px solid #f3f4f6; 
+        }
+
+        td { 
+            padding: 15px 12px; 
+            border-bottom: 1px solid #f3f4f6; 
+            color: #111827; 
+        }
+
+        .action-link { 
+            color: #1e3a8a; 
+            font-weight: 800; 
+            text-decoration: none; 
+            display: inline-block; 
+            line-height: 1.1; 
+            cursor: pointer; 
+        }
+
+        .action-sub { 
+            font-size: 13px; 
+            color: #1e3a8a; 
+            font-weight: 700; 
+            display: block; 
+        }
+
+        .device-id {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--brand-blue);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <div class="header-actions">
+        <a href="{% url 'dashboard' %}" class="back-btn">
+            <i class="fa-solid fa-arrow-left"></i> Back
+        </a>
+
+        <div class="device-id">
+            Device ID: {{ device.device_id }}
+        </div>
+
+        <form method="post" action="">
+            {% csrf_token %}
+            <button type="submit" name="remove_device" class="remove-btn">
+                Remove Device
+            </button>
+        </form>
+    </div>
+
+    <!-- ALERT THRESHOLDS -->
+    <div class="white-card">
+        <h2 class="title">Alert Thresholds</h2>
+
+        <form method="post">
+            {% csrf_token %}
+            <div class="grid">
+                <div class="input-box">
+                    <label>Min Temp (°C)</label>
+                    <input type="number" name="min_temp" value="{{ device.min_temp }}">
+                </div>
+
+                <div class="input-box">
+                    <label>Max Temp (°C)</label>
+                    <input type="number" name="max_temp" value="{{ device.max_temp }}">
+                </div>
+
+                <div class="input-box">
+                    <label>Min Humidity (%)</label>
+                    <input type="number" name="min_humidity" value="{{ device.min_humidity }}">
+                </div>
+
+                <div class="input-box">
+                    <label>Max Humidity (%)</label>
+                    <input type="number" name="max_humidity" value="{{ device.max_humidity }}">
+                </div>
+            </div>
+
+            <button type="submit" name="save_thresholds" class="btn-save">
+                Save Changes
+            </button>
+        </form>
+    </div>
+
+    <!-- PACKAGE HISTORY -->
+    <div class="white-card">
+        <h2 class="title">Previous Package History</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Package ID</th>
+                    <th>Assigned Date</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for pkg in package_history %}
+                <tr>
+                    <td>#{{ pkg.package_id }}</td>
+                    <td>{{ pkg.assigned_date }}</td>
+                    <td style="color: #6b7280; font-weight: 600;">
+                        {{ pkg.status }}
+                    </td>
+                    <td>
+                        <a href="#" class="action-link">
+                            View
+                            <span class="action-sub">detail</span>
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" style="text-align:center;">
+                        No package history found.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>

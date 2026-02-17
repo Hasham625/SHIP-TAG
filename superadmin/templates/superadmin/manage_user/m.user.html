@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHIP-TAG | Super Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --brand-blue: #2d3e7d; 
+            --header-blue: #004d80;
+            --bg-gray: #d9d9d9;
+            --accent-blue: #d1e8ff;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; transition: all 0.2s ease; }
+
+        body, html {
+            height: 100%;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #ffffff;
+            overflow: hidden;
+        }
+
+        .dashboard-layout { display: flex; flex-direction: column; height: 100vh; background-color: var(--bg-gray); }
+        
+        header {
+            background-color: var(--header-blue);
+            color: white;
+            padding: 12px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn-logout {
+            background: transparent; color: white; border: 2px solid white;
+            padding: 8px 25px; border-radius: 12px; font-weight: 500; cursor: pointer;
+        }
+
+        .main-container { display: flex; flex: 1; padding: 20px; gap: 20px; overflow: hidden; }
+        
+        /* SIDEBAR */
+        .sidebar { width: 280px; background: white; border-radius: 15px; padding: 20px; display: flex; flex-direction: column; }
+        
+        .nav-item { 
+            padding: 12px 15px; margin-bottom: 5px; border-radius: 5px; 
+            color: #004d80; font-weight: 600; display: flex; align-items: center; 
+            gap: 10px; cursor: pointer; 
+        }
+        
+        .nav-item.active-nav { background-color: var(--accent-blue); }
+        .nav-item.disabled-nav { opacity: 0.3; cursor: not-allowed; pointer-events: none; }
+
+        /* SUB-CATEGORY STYLES */
+        .sub-menu {
+            display: none; /* Hidden by default */
+            flex-direction: column;
+            padding-left: 35px;
+            margin-bottom: 10px;
+        }
+        .sub-menu.show { display: flex; }
+        
+        .sub-item {
+            padding: 8px 10px;
+            font-size: 14px;
+            color: #64748b;
+            font-weight: 500;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .sub-item:hover { color: var(--header-blue); background: #f8fafc; }
+        .sub-item.active-sub { color: var(--header-blue); font-weight: 700; background: #f0f7ff; }
+
+        /* CONTENT AREA */
+        .content-view { flex: 1; display: block; overflow-y: auto; padding-right: 10px; }
+        .view-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+        .button-group { display: flex; gap: 12px; }
+
+        .btn-primary {
+            background-color: var(--header-blue); color: white; border: none;
+            padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer;
+            display: flex; align-items: center; gap: 8px;
+        }
+
+        .flex-card { background: white; border-radius: 20px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); min-height: 500px; display: flex; flex-direction: column; }
+        .flex-card h3 { color: #000; font-size: 18px; margin-bottom: 15px; border-bottom: 2px solid #f1f5f9; padding-bottom: 10px; }
+        .placeholder-box { flex: 1; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #94a3b8; }
+
+        /* MODAL STYLES */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 1000;
+        }
+        .modal-content { background: white; padding: 30px; border-radius: 20px; width: 450px; text-align: center; }
+        .modal-title { font-size: 20px; font-weight: 700; color: var(--header-blue); margin-bottom: 20px; }
+        .selection-box { display: flex; flex-direction: column; gap: 15px; }
+        .selection-btn {
+            padding: 15px; border: 2px solid #e2e8f0; border-radius: 12px; cursor: pointer;
+            font-weight: 600; color: #475569; display: flex; justify-content: space-between; align-items: center;
+        }
+        .selection-btn:hover { border-color: var(--header-blue); background: #f0f7ff; color: var(--header-blue); }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-layout">
+        <header>
+            <h2 style="font-weight: 800;">Ship Tag Logo</h2>
+            <button class="btn-logout">Logout</button>
+        </header>
+
+        <div class="main-container">
+            <div class="sidebar">
+                <div class="nav-item disabled-nav"><i class="fa-solid fa-chart-line"></i> Dashboard</div>
+                
+                <div class="nav-item active-nav" onclick="toggleSubMenu()">
+                    <i class="fa-solid fa-users"></i> Manage Users
+                    <i class="fa-solid fa-chevron-down" style="margin-left: auto; font-size: 12px;"></i>
+                </div>
+                
+                <div id="user-sub-menu" class="sub-menu show">
+                    <div class="sub-item active-sub" onclick="switchContent('Manage User', this)">Manage User</div>
+                    <div class="sub-item" onclick="switchContent('User Log', this)">User Log</div>
+                </div>
+
+                <div class="nav-item disabled-nav"><i class="fa-solid fa-box"></i> Manage Packages</div>
+                <div class="nav-item disabled-nav"><i class="fa-solid fa-microchip"></i> Manage Devices</div>
+                <div class="nav-item disabled-nav"><i class="fa-solid fa-user-circle"></i> My Profile</div>
+            </div>
+
+            <div id="manage-users-view" class="content-view">
+                <div class="view-header">
+                    <h2 id="page-title" style="color: var(--header-blue); font-weight: 700;">Manage User</h2>
+                    <div class="button-group">
+                        <button class="btn-primary" onclick="openModal()">
+                            <i class="fa-solid fa-user-plus"></i> Add User
+                        </button>
+                        <button class="btn-primary">
+                            <i class="fa-solid fa-building"></i> Add Organisation
+                        </button>
+                    </div>
+                </div>
+
+                <div class="flex-card">
+                    <h3 id="card-title">User & Organisation Directory</h3>
+                    <div class="placeholder-box">
+                        <p id="placeholder-text">Current Users and Organizations will be listed here.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="userModal" onclick="closeModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-title">Select User Type</div>
+            <div class="selection-box">
+                <div class="selection-btn" onclick="alert('Organisation User Form')">
+                    <span>Organisation User</span>
+                    <i class="fa-solid fa-sitemap"></i>
+                </div>
+                <div class="selection-btn" onclick="alert('Local User Addition Form')">
+                    <span>Local User Addition</span>
+                    <i class="fa-solid fa-user"></i>
+                </div>
+            </div>
+            <button onclick="document.getElementById('userModal').style.display='none'" style="margin-top: 20px; background: none; border: none; color: #94a3b8; cursor: pointer; text-decoration: underline;">Cancel</button>
+        </div>
+    </div>
+
+    <script>
+        // Toggle the sub-menu visibility
+        function toggleSubMenu() {
+            const menu = document.getElementById('user-sub-menu');
+            menu.classList.toggle('show');
+        }
+
+        // Switch content based on sub-item clicked
+        function switchContent(type, element) {
+            // Update Active Class for sub-items
+            document.querySelectorAll('.sub-item').forEach(item => item.classList.remove('active-sub'));
+            element.classList.add('active-sub');
+
+            // Update Page Titles and Text
+            document.getElementById('page-title').innerText = type;
+            document.getElementById('card-title').innerText = type === 'Manage User' ? 'User & Organisation Directory' : 'Recent User Activity Log';
+            document.getElementById('placeholder-text').innerText = type === 'Manage User' ? 'Current Users and Organizations will be listed here.' : 'No activity logs recorded yet.';
+        }
+
+        function openModal() {
+            document.getElementById('userModal').style.display = 'flex';
+        }
+
+        function closeModal(e) {
+            if(e.target.id === 'userModal') {
+                document.getElementById('userModal').style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>

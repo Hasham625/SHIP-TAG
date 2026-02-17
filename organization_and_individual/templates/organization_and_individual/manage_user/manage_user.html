@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHIP-TAG | Manage Users</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --header-blue: #1b4370;
+            --bg-gray: #dbe0e6;
+            --active-blue: #d8e8f9;
+            --sidebar-text: #7c8ea1;
+            --brand-text: #1b4370;
+            --success-green: #487e4c;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: var(--bg-gray); height: 100vh; display: flex; flex-direction: column; }
+
+        /* --- SLIM HEADER (IMAGE MATCH) --- */
+        header {
+            background-color: var(--header-blue);
+            height: 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 25px;
+            color: white;
+        }
+        .logo { font-size: 24px; font-weight: bold; }
+        .logout-btn {
+            background: transparent;
+            border: 1.5px solid white;
+            color: white;
+            padding: 4px 20px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* --- LAYOUT --- */
+        .wrapper { display: flex; flex: 1; padding: 20px; gap: 20px; overflow: hidden; }
+
+        /* --- SIDEBAR --- */
+        .sidebar {
+            width: 240px;
+            background: white;
+            border-radius: 25px;
+            padding: 25px 15px;
+            display: flex;
+            flex-direction: column;
+        }
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 15px;
+            text-decoration: none;
+            color: var(--sidebar-text);
+            font-weight: bold;
+            border-radius: 12px;
+            margin-bottom: 5px;
+        }
+        .nav-item.active {
+            background-color: var(--active-blue);
+            color: var(--brand-text);
+        }
+        .help-section { margin-top: auto; padding: 10px; }
+        .help-section h3 { color: var(--brand-text); font-size: 26px; margin-bottom: 10px; }
+        .chat-btn {
+            background-color: var(--header-blue);
+            color: white;
+            width: 100%;
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* --- MAIN CONTENT --- */
+        .main-card {
+            flex: 1;
+            background: white;
+            border-radius: 35px;
+            padding: 40px;
+            overflow-y: auto;
+        }
+        .title { color: var(--brand-text); font-size: 28px; margin-bottom: 35px; font-weight: 800; }
+
+        table { width: 100%; border-collapse: collapse; }
+        th { text-align: left; padding: 15px; color: #7f8c9d; font-size: 16px; border-bottom: 1px solid #f0f2f5; }
+        td { padding: 20px 15px; border-bottom: 1px solid #f0f2f5; color: #333; font-size: 16px; font-weight: 600; }
+        .status-active { color: var(--success-green); font-weight: 800; }
+        .view-link { color: var(--header-blue); font-weight: 800; text-decoration: none; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">Ship Tag Logo</div>
+        <button class="logout-btn">Logout</button>
+    </header>
+
+    <div class="wrapper">
+        <div class="sidebar">
+            <a href="#" class="nav-item"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
+            <a href="#" class="nav-item active"><i class="fa-solid fa-users"></i> Manage Users</a>
+            <a href="#" class="nav-item"><i class="fa-solid fa-box"></i> Manage Packages</a>
+            <a href="#" class="nav-item"><i class="fa-solid fa-microchip"></i> Manage Devices</a>
+            <a href="#" class="nav-item"><i class="fa-solid fa-circle-user"></i> My Profile</a>
+
+            <div class="help-section">
+                <h3>Need Help ?</h3>
+                <button class="chat-btn">Chat With Us</button>
+            </div>
+        </div>
+
+        <div class="main-card">
+            <h1 class="title">Manage Users</h1>
+            <table>
+                <thead>
+                    <tr>
+                        <th>User ID</th>
+                        <th>Name</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>#USR-001</td>
+                        <td>Admin User</td>
+                        <td class="status-active">Active</td>
+                        <td><a href="user_detail.html" class="view-link">View</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</body>
+</html>

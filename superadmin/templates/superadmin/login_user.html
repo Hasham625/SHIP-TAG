@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ship Tag | Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-navy: #283881;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f8fafc;
+        }
+        .forgot-password {
+            display: block;
+            text-align: right;
+            margin-bottom: 30px;
+            font-size: 1rem;
+            color: var(--primary-navy);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+
+        .login-card {
+            background: white;
+            padding: 60px 80px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
+            width: 90%;
+            max-width: 650px;
+            text-align: center;
+            border: 1px solid #edf2f7;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 50px;
+        }
+
+        .logo-section h1 {
+            color: var(--primary-navy);
+            font-size: 3.5rem;
+            letter-spacing: 2px;
+            font-weight: 800;
+        }
+
+        .input-box {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .input-box i {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary-navy);
+            font-size: 1.4rem;
+        }
+
+        .input-box input {
+            width: 100%;
+            padding: 20px 20px 20px 60px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            outline: none;
+        }
+
+        .login-submit-btn {
+            width: 100%;
+            background-color: var(--primary-navy);
+            color: white;
+            padding: 20px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.5rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .error-message {
+            background-color: #fee2e2;
+            color: #991b1b;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 1rem;
+        }
+
+        .footer-text {
+            margin-top: 80px;
+            color: #333;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="login-card">
+        <div class="logo-section"><span>🚢</span>
+            <h1>SHIP TAG</h1>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="error-message">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+
+        <form method="POST" action="{% url 'login_user' %}">
+            {% csrf_token %}
+            <div class="input-box">
+                <i class="fa-solid fa-user"></i>
+                <input type="email" name="email" placeholder="Email" required>
+            </div>
+            <div class="input-box">
+                <i class="fa-solid fa-lock"></i>
+                <input type="password" name="password" placeholder="Password" required>
+            </div>
+            <!-- ✅ Forgot Password added -->
+    <a href="/enduser/forgot-password" class="forgot-password">Forgot Password?</a>
+
+            <button type="submit" class="login-submit-btn">Login</button>
+        </form>
+
+        <div class="footer-text">Secure Shipment Tracking System</div>
+    </div>
+</body>
+
+</html>
