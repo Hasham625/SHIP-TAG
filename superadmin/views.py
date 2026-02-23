@@ -35,11 +35,33 @@ def login_admin(request):
             request.session['user_email'] = result.get("email")
             request.session['is_logged_in'] = True
             
-            return redirect('user_dashboard')
+            return redirect('admin_dashboard')
         else:
             messages.error(request, "Invalid email or password")
 
     return render(request, "superadmin/login_user.html")
 
+
+
+
 def admin_dashboard(request):
     return render(request, "superadmin/dashboard/admin_dashboard.html")
+
+
+
+
+def logout_user(request):
+    # Properly log out the user
+    logout(request)
+    # Redirect to your login page (make sure the URL name matches your urls.py)
+    return redirect('login_admin')
+
+# def user_profile(request):
+#     return render(request, "superadmin/profile/profile.html")
+
+def manage_packages(request):
+    return render(request, "superadmin/manage_package/manage_packages.html")
+
+def add_package(request):
+    print("Accessing add_package view")  # Debugging statement
+    return render(request, "superadmin/manage_package/add_package.html")

@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+{% load static %}
+<head>
+    {% include 'head.html' %}
+</head>
+
+<body>
+
+<div id="dashboard-layout" class="dashboard-layout">
+
+    {% include 'header.html' %}
+
+    <div class="main-container">
+
+        {% include 'left_panel.html' %}
+
+        <!-- Content Area -->
+        <div class="content-area" id="content">
+            {% block content %}
+            {% endblock %}
+        </div>
+        
+    </div>
+    {% include 'footer.html' %}
+
+</div>
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+$(document).on("click", "a.ajax-link", function(e){
+    e.preventDefault();
+
+    let url = $(this).attr("href");
+
+    $("#content").load(url + " #content>*");
+});
+</script>
+
+</body>
+</html>
