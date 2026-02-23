@@ -74,18 +74,3 @@ class UserLog(models.Model):
         db_table = "user_logs"
         managed = False
 
-class SupportMessage(models.Model):
-    message_id = models.AutoField(primary_key=True)  # ← Changed from 'id'
-    user_id = models.UUIDField()  # ← Changed from ForeignKey to UUID
-    sender = models.CharField(max_length=10, choices=[('user','User'), ('support','Support')])
-    message_text = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    is_read = models.BooleanField(default=False)
-
-    class Meta:
-        db_table = "support_messages"
-        ordering = ['created_at']
-        managed = False  # ← Important: don't let Django manage this table
-
-    def __str__(self):
-        return f"{self.sender}: {self.message_text[:20]}"
