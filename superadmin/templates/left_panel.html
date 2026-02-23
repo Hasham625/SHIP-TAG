@@ -1,0 +1,42 @@
+<div class="sidebar">
+  <a
+    href="/superadmin/dashboard/"
+    class="nav-item {% if request.path == '/superadmin/dashboard/' %}active-nav{% endif %}"
+    style="display: flex; align-items: center; gap: 10px; text-decoration: none"
+  >
+    <i class="fa-solid fa-chart-line"></i> Dashboard
+  </a>
+  <div class="nav-item disabled-nav">
+    <i class="fa-solid fa-users"></i> Manage Users
+  </div>
+  
+ <div class="sidebar-dropdown">
+
+    <div class="nav-item" style="display:flex;align-items:center;gap:10px;">
+        <i class="fa-solid fa-box"></i> Manage Packages
+    </div>
+
+    <div class="dropdown-content">
+
+        <a href="/superadmin/manage-packages/"
+           class="{% if request.path == '/superadmin/manage-packages/' %}active-nav{% endif %}">
+            Manage Package
+        </a>
+
+        <a href="/superadmin/package-log/"
+           class="{% if request.path == '/superadmin/package-log/' %}active-nav{% endif %}">
+            Packages Log
+        </a>
+
+    </div>
+
+</div>
+
+
+  <div class="nav-item disabled-nav">
+    <i class="fa-solid fa-microchip"></i> Manage Devices
+  </div>
+  <div class="nav-item disabled-nav">
+    <i class="fa-solid fa-user-circle"></i> My Profile
+  </div>
+</div>
