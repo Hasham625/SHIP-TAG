@@ -42,4 +42,4 @@ def login_admin(request):
     return render(request, "superadmin/login_user.html")
 
 def admin_dashboard(request):
-    return render(request, "dashboard/admin_dashboard.html")
+    return render(request, "superadmin/dashboard/admin_dashboard.html")
