@@ -1,0 +1,170 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+{% include 'head.html' %}
+<style>
+    /* Button Container */
+    .d-flex {
+        display: flex;
+        align-items: center;
+    }
+
+    .gap-2 {
+        gap: 10px;
+    }
+
+    /* Update Button */
+    .view-more-button {
+        background: #1b4d89;
+        color: white;
+        border: none;
+        padding: 10px 18px;
+        border-radius: 8px;
+        font-weight: 700;
+        cursor: pointer;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        transition: 0.25s ease;
+    }
+
+    .view-more-button:hover {
+        background: #163b6a;
+    }
+
+    /* Cancel Button */
+    .back-more-button {
+        background: #f1f5f9;
+        color: #334155;
+        padding: 10px 18px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        transition: 0.25s ease;
+    }
+
+    .back-more-button:hover {
+        background: #e2e8f0;
+    }
+</style>
+
+<body>
+
+    <div id="main-wrapper">
+        <div id="content" class="py-4">
+
+            <div class="container1">
+                <div class="row">
+
+                    <div class="col-12">
+
+                        <div class="ibox">
+
+                            <div class="ibox-title">
+                                <h5 class="clr-wht">
+                                    <i class="fa-solid fa-sliders"></i>
+                                    Change Threshold
+                                </h5>
+                            </div>
+
+                            <div class="ibox-content-editpro">
+
+                                <form method="POST" action="{% url 'change_package_threshold' package_id %}">
+
+                                    {% csrf_token %}
+
+                                    <!-- Temperature -->
+                                    <div class="mb-3">
+                                        <div class="row">
+
+                                            <div class="col-md-4">
+                                                <label class="fw-500">Temperature Threshold :</label>
+                                            </div>
+
+                                            <div class="col-md-8">
+                                                <input type="number" name="temperature_threshold"
+                                                    class="form-control bg-transparent border-1"
+                                                    placeholder="Enter temperature threshold"
+                                                    value="{{ threshold_details.temperature_threshold|default:'' }}"
+                                                    required>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <!-- Humidity -->
+                                    <div class="mb-3">
+                                        <div class="row">
+
+                                            <div class="col-md-4">
+                                                <label class="fw-500">Humidity Threshold :</label>
+                                            </div>
+
+                                            <div class="col-md-8">
+                                                <input type="number" name="humidity_threshold"
+                                                    class="form-control bg-transparent border-1"
+                                                    placeholder="Enter humidity threshold"
+                                                    value="{{ threshold_details.humidity_threshold|default:'' }}"
+                                                    required>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <!-- Pressure -->
+                                    <div class="mb-3">
+                                        <div class="row">
+
+                                            <div class="col-md-4">
+                                                <label class="fw-500">Pressure Threshold :</label>
+                                            </div>
+
+                                            <div class="col-md-8">
+                                                <input type="number" name="pressure_threshold"
+                                                    class="form-control bg-transparent border-1"
+                                                    placeholder="Enter pressure threshold"
+                                                    value="{{ threshold_details.pressure_threshold|default:'' }}"
+                                                    required>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <!-- Buttons -->
+                                    <div class="row mt-3">
+                                        <div class="col-md-12 d-flex gap-2">
+
+                                            <button type="submit" class="view-more-button">
+                                                <i class="fa-solid fa-check"></i>
+                                                Update Threshold
+                                            </button>
+
+                                            <a href="javascript:void(0)" onclick="parent.jQuery.fancybox.close();"
+                                                class="back-more-button">
+                                                <i class="fa-solid fa-xmark"></i>
+                                                Cancel
+                                            </a>
+
+                                        </div>
+                                    </div>
+
+                                </form>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+</body>
+
+</html>

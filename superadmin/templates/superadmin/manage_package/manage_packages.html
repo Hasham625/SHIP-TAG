@@ -1,70 +1,93 @@
 {% extends "base.html" %}
 {% block content %}
 
-          <div class="list-card">
-<div style="display:flex; justify-content:flex-end; margin-bottom:15px;">
-    <a href="{% url 'add_package' %}"
-       class="eyes-ico fancybox_iframe_small"
-       style="text-decoration:none; display:inline-flex; align-items:center; gap:6px; color:white; background:#1b4d89; padding:8px 14px; border-radius:8px;">
-        <i class="fa-solid fa-pen-to-square"></i>
-        Add Package
+<div class="list-card">
+  <div style="display:flex; justify-content:flex-end; margin-bottom:15px;">
+    <a href="{% url 'add_package' %}" class="eyes-ico fancybox_iframe_small"
+      style="text-decoration:none; display:inline-flex; align-items:center; gap:6px; color:white; background:#1b4d89; padding:8px 14px; border-radius:8px;">
+      <i class="fa-solid fa-pen-to-square"></i>
+      Add Package
     </a>
-</div>
+  </div>
 
-            <table>
-              <thead>
-                <tr>
-                  <th>Package ID</th>
-                  <th>From</th>
-                  <th>Destination</th>
-                  <th>Status</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>#PKG-9920</td>
-                  <td>London, UK</td>
-                  <td>Karachi, Pakistan</td>
-                  <td class="status-text">In Transit</td>
-                  <td>
-                    <a href="#" class="action-link view-link">View Details</a>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-      </div>
-    </div>
-    {% load static %}
+  <table>
+    <thead>
+      <tr>
+        <th>Package ID</th>
+        <th>From</th>
+        <th>Destination</th>
+        <th>Status</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for package in packages %}
+
+      <tr>
+        <td>#PKG-{{ package.id|stringformat:"s"|slice:":8" }}</td>
+
+        <td>
+          {{ package.from_city }}, {{ package.from_country }}
+        </td>
+
+        <td>
+          {{ package.to_city }}, {{ package.to_country }}
+        </td>
+
+        <td class="status-text">
+          {{ package.progress_status|title }}
+        </td>
+
+        <td>
+          <a href="{% url 'view_package' package.package_id %}" class="action-link view-link">
+            View Details
+          </a>
+        </td>
+      </tr>
+
+      {% empty %}
+
+      <tr>
+        <td colspan="5" style="text-align:center; padding:30px;">
+          No packages found.
+        </td>
+      </tr>
+
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+</div>
+</div>
+{% load static %}
 <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
 <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
 <script src="{% static 'vendor/bootstrap-select/js/bootstrap-select.min.js' %}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>
-  <script type="text/javascript">
-jQuery(".fancybox_iframe_small").fancybox({
+<script type="text/javascript">
+  jQuery(".fancybox_iframe_small").fancybox({
     width: "60%",
     height: "80%",
     autoSize: false,
     type: "iframe",
     helpers: {
-        overlay: {
-            locked: false
-        }
+      overlay: {
+        locked: false
+      }
     }
-});
-  </script>
-  <!-- FANCYBOX JS ENDS -->
+  });
+</script>
+<!-- FANCYBOX JS ENDS -->
 
-  <script type="text/javascript">
-    $(document).ready(function () {
-      //FANCYBOX
-      //https://github.com/fancyapps/fancyBox
-      $(".fancybox").fancybox({
-        openEffect: "none",
-        closeEffect: "none",
-      });
+<script type="text/javascript">
+  $(document).ready(function () {
+    //FANCYBOX
+    //https://github.com/fancyapps/fancyBox
+    $(".fancybox").fancybox({
+      openEffect: "none",
+      closeEffect: "none",
     });
-  </script>
+  });
+</script>
 
 {% endblock %}
