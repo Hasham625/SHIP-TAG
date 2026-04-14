@@ -1,0 +1,58 @@
+name: shiptag
+description: "SHIPTAG - IoT-based Logistics Tracking System for End Customers"
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # State Management
+  provider: ^6.0.0
+
+  # Service Locator
+  get_it: ^7.5.0
+
+  # HTTP Client
+  http: ^1.1.0
+
+  # Local Storage
+  shared_preferences: ^2.2.0
+
+  # Database
+  sqflite: ^2.3.0
+  path: ^1.8.3
+
+  # Charts
+  fl_chart: ^0.64.0
+
+  # Maps
+  google_maps_flutter: ^2.5.0
+  google_maps_flutter_web: ^0.5.14
+
+  # Data Tables
+  data_table_2: ^2.4.0
+
+  # Date/Time
+  intl: ^0.19.0
+
+  # UUID
+  uuid: ^4.0.0
+
+  # Connectivity
+  connectivity_plus: ^5.0.0
+
+  # Toast notifications
+  fluttertoast: ^8.2.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
