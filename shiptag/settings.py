@@ -62,9 +62,9 @@ WSGI_APPLICATION = "shiptag.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "shiptag",
-        "USER": "postgres",
-        "PASSWORD": "hasham2004",
+        "NAME": "db-name",
+        "USER": "db-username",
+        "PASSWORD": "db-password",
         "HOST": "localhost",
         "PORT": "5432",
         "OPTIONS": {
@@ -102,5 +102,5 @@ EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = "hashamnadeem876@gmail.com"
-EMAIL_HOST_PASSWORD = "iozf tltt djwl wwuo"
+EMAIL_HOST_USER = "ypur-host-email
+EMAIL_HOST_PASSWORD = "your-password"
